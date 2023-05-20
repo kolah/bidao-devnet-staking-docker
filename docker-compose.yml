@@ -1,0 +1,35 @@
+version: '3'
+services:
+  nethermind:
+    depends_on:
+      - deposit
+    restart: unless-stopped
+    build:
+        context: nethermind/.
+        dockerfile: Dockerfile
+    links:
+      - teku
+    volumes:
+      - ./keys/jwt:/keys/jwt
+      - ./data/nethermind:/var/lib/nethermind
+  deposit:
+    env_file: .env
+    restart: no
+    build:
+        context: deposit/.
+        dockerfile: Dockerfile
+    volumes:
+      - ./keys/validator:/validator_keys
+  teku:
+    env_file:
+      - .env
+    depends_on:
+      - deposit
+    restart: unless-stopped
+    build:
+        context: teku/.
+        dockerfile: Dockerfile
+    volumes:
+      - ./keys/validator:/validator_keys
+      - ./data/teku:/data_teku
+      - ./keys/jwt:/jwt
