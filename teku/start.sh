@@ -1,10 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
+while [ -z "$(find "/validator_keys" -name "keystore*.json" -print -quit)" ]; do
+  echo "Waiting for validator keys to be generated..."
+  sleep 1  # Wait for 1 second before checking again
+done
+
 mkdir -p /teku_validator_keys
+rm /teku_validator_keys/* || true
 cp /validator_keys/keystore* /teku_validator_keys
-for keyFile in /teku_validator_keys/*.json; do echo ${KEYSTORE_PASSWORD} > "/$(echo "$keyFile" | sed -e 's/\/\(.*\)\.json/\1/').txt"; done
+for keyFile in /teku_validator_keys/*.json; do echo "${KEYSTORE_PASSWORD}" > "/$(echo "$keyFile" | sed -e 's/\/\(.*\)\.json/\1/').txt"; done
 
 exec /usr/local/bin/teku/bin/teku \
   --network=bidao \

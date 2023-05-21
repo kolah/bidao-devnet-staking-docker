@@ -21,6 +21,6 @@ GRAFFITI=""
 3. Run `docker-compose up -d`
 
 After first run all secrets will be created automatically. You can find them in the `keys` folder.
-Mnemonic phrase will be stored in `keys/validator/mnemonic.txt` file.
+Mnemonic phrase will be stored in `keys/validator/mnemonic` file.
 `deposit_data-*.json` will be stored in `keys/validator/` directory.
 
